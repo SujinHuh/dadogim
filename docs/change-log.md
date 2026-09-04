@@ -235,3 +235,13 @@
 - 관련 결정: DEC-029, DEC-030
 - 미구현: GitHub Action workflow, 필수 상태 검사와 브랜치 보호는 만들거나 설정하지 않았다.
 - 검증: 확정·연기·미구현 상태, 문서 경로, DEC/CHG ID 중복 부재, Markdown 공백과 루트 `AGENTS.md` 크기 6,629바이트를 확인했다.
+
+## CHG-021. 문서 기준선과 검수 규칙 PR 분리 게시
+
+- 날짜: 2026-09-05
+- 실제 변경:
+  - `codex/docs-baseline`의 커밋 `977b74f`를 `main` 기준 PR #2 `docs: 프로젝트 문서 기준선 등록`으로 게시했다.
+  - `codex/add-review-rules`의 커밋 `788efb0`을 `codex/docs-baseline` 기준 PR #3 `docs: 검수와 토큰 절약 운영 확정`으로 게시했다.
+- 분리 이유: 미게시 로컬 문서 기준선 1,322줄과 이번 검수 변경 241줄을 한 PR에 섞지 않고, PR #3에서 이번 요청의 실제 차이만 검토할 수 있게 하기 위해서다.
+- 병합 순서: PR #2를 먼저 검토·병합한 뒤 PR #3의 base를 최신 `main`에 맞추고 다시 검수한다. 두 PR 모두 자동 병합하지 않는다.
+- 검증: 두 PR의 base·head·커밋·파일 목록, `CLEAN`·`MERGEABLE` 상태와 PR #3 본문의 빈 템플릿 부재를 GitHub에서 확인했다.
