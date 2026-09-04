@@ -199,3 +199,39 @@
 - 관련 결정: DEC-026
 - 상태 영향: 이번 변경은 질문 관리 방식을 확정했을 뿐, `C-01`을 포함한 제품 요구사항은 새로 확정하지 않았다.
 - 검증: 미확정 ID 보존, 중복 목록 제거, 현재 질문 하나만 선택지 확장, 요구사항·DEC·CHG 연결과 Markdown 공백을 확인했다.
+
+## CHG-018. PR 자동 검사 기준과 깐깐한 관리자 검수 문서화
+
+- 날짜: 2026-09-05
+- 변경 대상: `AGENTS.md`, `docs/README.md`, `docs/pull-request-guide.md`, `docs/development-workflow.md`, `docs/review-guide.md`, `docs/open-questions.md`, `docs/decision-log.md`, `docs/change-log.md`
+- 핵심 변경:
+  - PR 제목·필수 섹션·Draft 상태·빈 템플릿을 자동 검사할 기준과 안전한 구현 조건을 작성했다.
+  - 루트 `AGENTS.md`에 PR 작성 규칙과 Codex가 인식하는 `## Code Review Rules` 세 항목을 추가했다.
+  - 깐깐한 관리자 검수의 입력, 순서, 반려 항목, 판정, 결과 형식과 호출 시점을 별도 가이드로 만들었다.
+  - DEC-018 호출 시점을 채택하고 자동 검사·독립 검수·사용자 병합의 역할을 DEC-027로 확정했다.
+  - 공식 OpenAI 문서를 바탕으로 토큰 절약 강화 선택지를 DEC-028 제안으로 남겼다.
+- 미구현: GitHub Action workflow, 필수 상태 검사와 브랜치 보호는 생성하거나 설정하지 않았다. `T-09B`에서 별도로 결정한다.
+- 변경 이유: 자동화가 형식만 검사한다는 한계를 명확히 하고, 실제 요구사항·diff·검증 증거를 독립적으로 판단하는 절차를 반복 가능하게 만들기 위해서다.
+- 관련 결정: DEC-017, DEC-018, DEC-025, DEC-027, DEC-028
+- 검증: 문서 링크, 제목 type, 판정 용어, 확정·제안·미구현 상태, ID 중복 부재와 Markdown 공백을 확인했다.
+
+## CHG-019. PR 템플릿 설정 PR 병합
+
+- 날짜: 2026-09-05
+- 변경 대상: GitHub PR #1, 원격 `main`, 원격 `codex/setup-pr-template` 브랜치
+- 실제 변경: PR #1 `chore: PR 템플릿 설정`을 squash merge해 원격 `main`을 `9989961`로 갱신하고 원격 작업 브랜치를 삭제했다.
+- 병합 전 검수: `main` base, 예상한 3개 파일, 한 커밋, `CLEAN`·`MERGEABLE`, 작성 완료된 PR 본문, 예상 밖 코드·민감정보 부재를 확인했다. 자동 상태 검사는 아직 없었다.
+- 사용자 승인: 사용자가 PR #1에 문제가 없어 보인다고 판단하고 병합을 요청했다.
+- 결과: GitHub에서 PR #1이 `MERGED`이고 merge commit이 `998996109993a94c514b9104239c7e3199ce8c2b`임을 확인했다.
+
+## CHG-020. Action 도입 연기와 토큰 절약 운영 확정
+
+- 날짜: 2026-09-05
+- 변경 대상: `AGENTS.md`, `docs/README.md`, `docs/development-workflow.md`, `docs/open-questions.md`, `docs/decision-log.md`, `docs/change-log.md`
+- 핵심 변경:
+  - PR 검사 Action을 코드와 첫 기능 일부가 생겨 실제 검증 명령이 정해질 때까지 연기했다.
+  - DEC-028 추천안 A를 확정하고 작업별 경로 안내, 제목·ID 검색, 필요한 범위 읽기, 같은 턴의 반복 읽기 금지와 중복 지침 금지를 적용했다.
+  - 하위 `AGENTS.md`는 기능별 특수 규칙이 반복될 때만 추가하도록 제한했다.
+- 관련 결정: DEC-029, DEC-030
+- 미구현: GitHub Action workflow, 필수 상태 검사와 브랜치 보호는 만들거나 설정하지 않았다.
+- 검증: 확정·연기·미구현 상태, 문서 경로, DEC/CHG ID 중복 부재, Markdown 공백과 루트 `AGENTS.md` 크기 6,629바이트를 확인했다.

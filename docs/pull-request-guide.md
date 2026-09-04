@@ -17,6 +17,7 @@
 9. 아직 검토가 필요한 작업은 Draft로, 완료 조건과 검증을 충족한 작업은 병합 가능한 PR로 표시한다.
 10. 실패한 테스트를 통과시키기 위한 근거 없는 assertion 약화·snapshot 갱신·skip·테스트 전용 프로덕션 분기를 허용하지 않는다.
 11. `main`에 직접 푸시하거나 PR을 자동 병합하지 않는다. 병합은 사용자가 diff와 검증 결과를 확인한 뒤 결정한다.
+12. 모든 필수 섹션을 실제 내용으로 채운다. 해당 사항이 없으면 `해당 없음`과 이유를 적고, 빈 HTML 주석이나 설명 없는 자리표시자를 남기지 않는다.
 
 ## PR 크기 판단
 
@@ -64,3 +65,40 @@
 ### 리뷰 요청
 
 사용자가 집중해서 볼 파일·동작·결정과 아직 확인되지 않은 사항을 구체적으로 적는다.
+
+## PR 메타데이터 자동 검사 기준
+
+> 상태: 검사 기준은 사용자 확정이다. GitHub Action 파일과 필수 상태 검사는 코드와 첫 기능 일부가 생긴 뒤 `T-09B`에서 다시 결정하며 현재 자동 실행되지 않는다.
+
+### 모든 PR
+
+- 제목은 `^(feat|fix|refactor|test|docs|build|ci|chore): .+` 형식이어야 한다.
+- `feature:`, `draft:`, `[Draft]`, scope와 빈 설명을 허용하지 않는다.
+- 템플릿의 모든 `##` 필수 섹션이 있어야 한다.
+- 변경 유형을 실제 변경에 맞게 하나 이상 선택해야 한다.
+- Draft와 병합 가능 체크는 GitHub의 실제 Draft 상태와 일치해야 한다.
+- 빈 템플릿 HTML 주석과 설명 없는 자리표시자가 남아 있으면 실패한다.
+
+### Ready for review
+
+- 변경 내용, 변경 이유, 검증 결과 또는 미실행 이유가 실제 문장으로 작성되어야 한다.
+- 연관 `REQ-*`·`DEC-*`·`CHG-*` 또는 `없음`이 있어야 한다.
+- 개인정보·보안·데이터 영향과 남은 위험을 작성해야 한다. `없음`이면 판단 이유를 함께 적는다.
+- `병합 가능한 PR`을 선택해야 한다.
+
+Draft도 필수 섹션은 유지한다. 미완료 내용은 빈 주석 대신 `작업 중`, `미정`, `검증 예정`과 같이 현재 상태를 적는다. Ready for review로 바뀌면 완성 조건을 다시 검사한다.
+
+자동 검사는 형식과 누락만 판정한다. 작성 내용이 사실인지, 테스트가 실제로 실행됐는지, 요구사항과 diff가 일치하는지는 [깐깐한 관리자 검수 가이드](review-guide.md)에 따라 별도로 판단한다.
+
+## 자동 검사 구현 시 보안 기준
+
+- `pull_request`의 `opened`, `edited`, `synchronize`, `reopened`, `converted_to_draft`, `ready_for_review`에서 다시 검사한다.
+- PR 제목·본문·브랜치 이름을 신뢰하지 않는다. `${{ github.event.pull_request.title }}` 같은 값을 셸 코드에 직접 보간하지 않고 이벤트 JSON이나 환경변수로 안전하게 전달한다.
+- 메타데이터 검사에는 소스 checkout과 쓰기 권한을 사용하지 않고 최소 읽기 권한만 부여한다.
+- 형식 검사가 통과해도 테스트, 브랜치 보호, 깐깐한 관리자 검수와 사용자 병합 승인을 생략하지 않는다.
+
+근거:
+
+- [GitHub Actions pull_request 이벤트](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request)
+- [GitHub Actions 스크립트 주입 방지](https://docs.github.com/en/actions/concepts/security/script-injections)
+- [Codex GitHub PR 리뷰](https://learn.chatgpt.com/docs/third-party/github)
